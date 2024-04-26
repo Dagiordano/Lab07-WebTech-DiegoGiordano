@@ -25,26 +25,11 @@ password: "juancho1234")
 4.times do
 	User.create(
 	name: Faker::JapaneseMedia::FullmetalAlchemistBrotherhood.character,
-	email: Faker::Internet.email(domain: 'example.com'),
+	email: Faker::Internet.email(domain: 'gmail.com'),
 	password: Faker::Internet.password(min_length: 8)
 	)
 
 end
-
-
-User.all.each do |user|
-	10.times do |n|
-		Post.create!(
-		title: Faker::Lorem.sentence,
-		content: Faker::Lorem.paragraph,
-		user_id: user.id,
-		published_at: Faker::Time.backward(days: 14, period: :evening),
-		answers_count: Faker::Number.between(from: 1, to: 200),
-		likes_count: Faker::Number.between(from: 1, to: 200)
-		)
-	end
-end
-
 
 
 
@@ -71,3 +56,23 @@ Tag.create!([{
 }
 
 ])
+
+
+Post.destroy_all
+
+User.all.each do |user|
+  2.times do |n|
+    post = user.posts.create!(
+      title: Faker::Lorem.sentence,
+      content: Faker::Lorem.paragraph,
+      published_at: Faker::Time.backward(days: 360, period: :evening),
+      answers_count: Faker::Number.between(from: 1, to: 200),
+      likes_count: Faker::Number.between(from: 1, to: 200)
+    )
+    
+    rand(1..3).times do
+	  post = Post.last
+      post.tags << Tag.offset(rand(Tag.count)).first
+    end
+  end
+end

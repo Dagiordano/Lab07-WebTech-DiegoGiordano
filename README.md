@@ -56,11 +56,13 @@ Make sure to create the relationships between the tables, so the database is pop
 2. Find all the tags that belong to a post with the title "Post 1".
 
 ```ruby
-### Code here
+### post = Post.find_by(title: "Post 1")
+### post.tags
 ```
 
 3. Find all users that have a post with the tag "Tag 1".
 
 ```ruby
-### Code here
+### user_ids = User.joins(posts: { tags: :post_tags }).where(tags: { name: "Tag 1" }).pluck(:name).uniq
+
 ```
